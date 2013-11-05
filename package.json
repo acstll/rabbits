@@ -1,0 +1,22 @@
+{
+  "name": "rabbit",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "author": "Arturo Castillo Delgado",
+  "license": "MIT",
+  "devDependencies": {
+    "domify": "~1.0.0",
+    "empty": "~0.2.0",
+    "eventemitter3": "0.0.1",
+    "express": "~3.4.4",
+    "browserify": "~2.35.1",
+    "through": "~2.3.4"
+  },
+  "dependencies": {
+    "lodash-node": "~2.2.1"
+  }
+}
