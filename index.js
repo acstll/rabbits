@@ -39,23 +39,20 @@ Rabbit.configure = function (options) {
 };
 
 Rabbit.prototype.initialize = function initialize () {
-  var self = this;
   var map = this.map;
-  var keys = Object.keys(map);
-  
-  keys.forEach(function (key) {
-    var binding;
-    var keypath = map[key];
-    var segments = key.split(/\s/);
-    var selector = segments[0];
-    var node = query(self.el, selector);
-    var type = segments[1] || 'text';
+  var key, keypath, segments, selector, node, type;
+
+  for (key in map) {
+    keypath = map[key];
+    segments = key.split(/\s/);
+    selector = segments[0];
+    node = query(this.el, selector);
+    type = segments[1] || 'text';
 
     if (!node) throw new Error('No element found using provided selector');
 
-    binding = new Binding(self, node, type, keypath);
-    self.bindings.push(binding);
-  });
+    this.bindings.push(new Binding(this, node, type, keypath));
+  }
 };
 
 Rabbit.prototype.render = function render () {
