@@ -24,5 +24,13 @@ exports.href = function (el, value) {
   el.href = value;
 };
 
+exports.value = {
+  event: 'change',
+  callback: function (el, value) {
+    // TODO: select
+    el.value = value;
+  }
+};
+
 // show, hide, enabled, disabled
-// checked, unchecked, value (input, select)
+// checked, unchecked

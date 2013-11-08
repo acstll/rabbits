@@ -57,7 +57,7 @@ Rabbit.prototype.initialize = function initialize () {
 
 Rabbit.prototype.render = function render () {
   this.bindings.forEach(function (binding) {
-    binding.sync();
+    binding.read();
   });
 };
 
@@ -75,72 +75,79 @@ function Binding (rabbit, node, type, keypath) {
   this.options = parse(keypath);
   this.adapter = rabbit.config.adapter;
   this.binder = binders[type];
-  this.callback = this.sync.bind(this);
+
+  if (!this.binder) throw new Error('Binder not found: ' + type);
   
   this.create();
 }
 
 Binding.prototype.create = function create () {
-  var oncreate = this.binder.oncreate;
   var subscribe = this.adapter.subscribe;
-  var model = this.rabbit.model;
-
-  this.setFn();
-  
-  subscribe(model, this.options, this.callback);
-  if (typeof oncreate === 'function') oncreate.call(this, this.el);
-};
-
-Binding.prototype.setFn = function setFn () {
   var binder = this.binder;
-  
+  var model = this.rabbit.model;
+  var wait = this.rabbit.config.wait || 150;
+
   if (typeof binder === 'function') {
     this.fn = binder;
-    return;
-  }
-
-  if (typeof binder.callback === 'function') {
+  } else if (typeof binder.callback === 'function') {
     this.fn = binder.callback;
-    return;
+  } else {
+    throw new Error('No callback found in binder');
   }
 
-  throw new Error('No callback found in binder');
+  if (binder.event) {
+    this.listener = debounce(this.publish.bind(this), wait);
+    this.el.addEventListener(binder.event, this.listener, false);
+  }
+  
+  if (typeof binder.oncreate === 'function')
+    binder.oncreate.call(this, this.el);
+
+  this.callback = this.read.bind(this);
+  subscribe(model, this.options, this.callback);
 };
 
 Binding.prototype.remove = function remove () {
-  var onremove = this.binder.onremove;
+  var binder = this.binder;
   var unsubscribe = this.adapter.unsubscribe;
   var model = this.rabbit.model;
    
-  unsubscribe(model, this.options, this.callback);
-  if (typeof onremove === 'function') onremove.call(this, this.el);
-};
- 
-Binding.prototype.sync = function sync () {
-  var value = this.read();
+  if (binder.event)
+    this.el.removeEventListener(binder.event, this.listener, false);
+
+  if (typeof binder.onremove === 'function')
+    binder.onremove.call(this, this.el);
   
-  this.fn.call(this, this.el, value);
+  unsubscribe(model, this.options, this.callback);
 };
  
 Binding.prototype.read = function read () {
   var model = this.rabbit.model;
   var keypath = this.options.keypath;
   var get = this.adapter.get;
-  var values = this.binder.values;
-  var obj = {};
+  var keys = this.binder.values;
+  var value;
 
-  if (values) {
-    values.forEach(function (key) {
-      obj[key] = get(model, keypath);
+  if (keys) {
+    value = {};
+    keys.forEach(function (key) {
+      value[key] = get(model, keypath);
     });
-
-    return obj;
+  } else {
+   value = get(model, keypath);
   }
 
-  return get(model, keypath);
+  this.fn.call(this, this.el, value);
 };
 
-// Binding.prototype.publish = function () {};
+Binding.prototype.publish = function publish () {
+  var model = this.rabbit.model;
+  var keypath = this.options.keypath;
+  var set = this.adapter.set;
+  var value = getValue(this.el);
+
+  set(model, keypath, value);
+};
 
 
 
@@ -154,4 +161,11 @@ function parse (keypath) {
   return {
     keypath: keypath
   };
+}
+
+function getValue (el) {
+  // TODO: <select>
+  return el.value
+    ? el.value
+    : el.innerText;
 }

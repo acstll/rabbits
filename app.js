@@ -16,15 +16,15 @@ Rabbit.binders.color = {
 
 Rabbit.binders.testing = {
   callback: function (el, value) {
-    el.style.color = value.color;
+    console.log('fuck TESTING!', value);
   },
-  values: ['color', 'title'],
   event: 'click'
 };
 
 // create model
 var model = Empty.wrap({
   title: 'Yija',
+  age: 32,
   link: 'fourty-five',
   url: 'http://google.com',
   color: 'lime'
@@ -32,11 +32,13 @@ var model = Empty.wrap({
 
 var bindings = {
   'p text': 'title',
+  'input value': 'link',
   'a text': 'link',
   'a href': 'url',
   '. color': {
     keypath: 'color',
     event: 'change:url'
+    // formatters: ['date']
   }
 };
 
