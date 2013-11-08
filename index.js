@@ -31,7 +31,7 @@ function Rabbit (obj, model, map, options) {
   }
 
   this.initialize();
-  this.render();
+  if (this.config.preload) this.render();
 }
 
 Rabbit.configure = function (options) {
@@ -49,7 +49,7 @@ Rabbit.prototype.initialize = function initialize () {
     node = query(this.el, selector);
     type = segments[1] || 'text';
 
-    if (!node) throw new Error('No element found using provided selector');
+    if (!node) throw new Error('No element found using the provided selector');
 
     this.bindings.push(new Binding(this, node, type, keypath));
   }
@@ -61,7 +61,7 @@ Rabbit.prototype.render = function render () {
   });
 };
 
-Rabbit.prototype.unbind = function unbind () {
+Rabbit.prototype.remove = function remove () {
   this.bindings.forEach(function (binding) {
     binding.remove();
   });
@@ -80,32 +80,33 @@ function Binding (rabbit, node, type, keypath) {
   this.create();
 }
 
-Binding.prototype.setFn = function setFn () {
-  var binder = this.binder;
-  
-  if (typeof binder === 'function') {
-    this.fn = this.binder;
-    return;
-  }
-
-  if (typeof binder.callback === 'function') {
-    this.fn = this.binder.callback;
-    return;
-  }
-
-  throw new Error('No callback found in binder');
-};
-
 Binding.prototype.create = function create () {
   var oncreate = this.binder.oncreate;
   var subscribe = this.adapter.subscribe;
   var model = this.rabbit.model;
 
   this.setFn();
+  
   subscribe(model, this.keypath, this.callback);
   if (typeof oncreate === 'function') oncreate.call(this, this.el);
 };
- 
+
+Binding.prototype.setFn = function setFn () {
+  var binder = this.binder;
+  
+  if (typeof binder === 'function') {
+    this.fn = binder;
+    return;
+  }
+
+  if (typeof binder.callback === 'function') {
+    this.fn = binder.callback;
+    return;
+  }
+
+  throw new Error('No callback found in binder');
+};
+
 Binding.prototype.remove = function remove () {
   var onremove = this.binder.onremove;
   var unsubscribe = this.adapter.unsubscribe;
