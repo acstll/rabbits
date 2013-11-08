@@ -72,7 +72,7 @@ Rabbit.prototype.remove = function remove () {
 function Binding (rabbit, node, type, keypath) {
   this.rabbit = rabbit;
   this.el = node;
-  this.keypath = keypath;
+  this.options = parse(keypath);
   this.adapter = rabbit.config.adapter;
   this.binder = binders[type];
   this.callback = this.sync.bind(this);
@@ -87,7 +87,7 @@ Binding.prototype.create = function create () {
 
   this.setFn();
   
-  subscribe(model, this.keypath, this.callback);
+  subscribe(model, this.options, this.callback);
   if (typeof oncreate === 'function') oncreate.call(this, this.el);
 };
 
@@ -112,7 +112,7 @@ Binding.prototype.remove = function remove () {
   var unsubscribe = this.adapter.unsubscribe;
   var model = this.rabbit.model;
    
-  unsubscribe(model, this.keypath, this.callback);
+  unsubscribe(model, this.options, this.callback);
   if (typeof onremove === 'function') onremove.call(this, this.el);
 };
  
@@ -124,20 +124,20 @@ Binding.prototype.sync = function sync () {
  
 Binding.prototype.read = function read () {
   var model = this.rabbit.model;
+  var keypath = this.options.keypath;
   var get = this.adapter.get;
   var values = this.binder.values;
-  var self = this;
   var obj = {};
 
   if (values) {
     values.forEach(function (key) {
-      obj[key] = get(model, self.keypath);
+      obj[key] = get(model, keypath);
     });
 
     return obj;
   }
 
-  return get(model, this.keypath);
+  return get(model, keypath);
 };
 
 // Binding.prototype.publish = function () {};
@@ -150,11 +150,8 @@ function query (el, selector) {
 }
 
 function parse (keypath) {
-  if (typeof keypath === 'string') {
-    // ...
-  }
-
-  if (typeof keypath === 'object') {
-    // ...
-  }
+  if (typeof keypath === 'object') return keypath;
+  return {
+    keypath: keypath
+  };
 }

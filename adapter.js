@@ -1,11 +1,13 @@
-exports.subscribe = function subscribe (obj, keypath, callback) {
+exports.subscribe = function subscribe (obj, options, callback) {
   if (!obj.on) return;
-  obj.on('change:' + keypath, callback);
+  var event = options.event ? options.event : 'change:' + options.keypath;
+  obj.on(event, callback);
 };
 
-exports.unsubscribe = function unsubscribe (obj, keypath, callback) {
+exports.unsubscribe = function unsubscribe (obj, options, callback) {
   if (!obj.off) return;
-  obj.off('change:' + keypath, callback);
+  var event = options.event ? options.event : 'change:' + options.keypath;
+  obj.off(event, callback);
 };
 
 exports.get = function get (obj, keypath) {

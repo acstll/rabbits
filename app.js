@@ -14,6 +14,14 @@ Rabbit.binders.color = {
   values: ['color', 'title']
 };
 
+Rabbit.binders.testing = {
+  callback: function (el, value) {
+    el.style.color = value.color;
+  },
+  values: ['color', 'title'],
+  event: 'click'
+};
+
 // create model
 var model = Empty.wrap({
   title: 'Yija',
@@ -26,7 +34,10 @@ var bindings = {
   'p text': 'title',
   'a text': 'link',
   'a href': 'url',
-  'a color': 'color'
+  '. color': {
+    keypath: 'color',
+    event: 'change:url'
+  }
 };
 
 // create view
