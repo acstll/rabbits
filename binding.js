@@ -67,10 +67,10 @@ Binding.prototype.read = function read () {
   if (keys) {
     value = {};
     keys.forEach(function (key) {
-      value[key] = get(model, keypath);
-    });
+      value[key] = this.format(get(model, keypath), 'read');
+    }, this);
   } else {
-   value = get(model, keypath);
+   value = this.format(get(model, keypath), 'read');
   }
 
   this.fn.call(this, this.el, value);
@@ -80,22 +80,62 @@ Binding.prototype.publish = function publish () {
   var model = this.rabbit.model;
   var keypath = this.options.keypath;
   var set = this.adapter.set;
-  var value = getValue(this.el);
+  var value = this.format(getValue(this.el), 'publish');
 
   set(model, keypath, value);
+};
+
+Binding.prototype.format = function format (value, action) {
+  var formatters = this.options.formatters || [];
+  var length = formatters.length;
+  var args, name, fn;
+
+  if (!length) return value;
+
+  if (action === 'publish') {
+    for (var i = length - 1; i >= 0; i--) {
+      value = _format.call(this, value, formatters[i]);
+    }
+  }
+
+  if (action === 'read') {
+    for (var i = 0; i < length; i++) {
+      value = _format.call(this, value, formatters[i]);
+    }
+  }
+
+  return value;
+  
+  function _format (_value, formatter) {
+    args = formatter.split(' ');
+    name = args.shift();
+    args.unshift(_value);
+    fn = this.formatters[name][action] || this.formatters[name];
+    if (typeof fn === 'function') return fn.apply(this, args);
+    return _value;
+  }
 };
 
 
 
 function parse (keypath) {
   if (typeof keypath === 'object') return keypath;
-  return {
-    keypath: keypath
-  };
+
+  if (typeof keypath === 'string') {
+    var segments = keypath.split('|');
+   
+    return {
+      keypath: segments.shift().trim(),
+      formatters: segments.map(trim)
+    };    
+  }
+
+  function trim (string) {
+    if (typeof string === 'string') return string.trim();
+  }
 }
 
 function getValue (el) {
-  // TODO: <select>
   return el.value
     ? el.value
     : el.innerText;

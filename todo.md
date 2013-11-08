@@ -1,9 +1,10 @@
-- write all basic binders except "each" (see rivets)
-- special each binder!
-- getValue: handle select elements (see rivets)
 - check rabbit.view when reading for overrides
-- parse and implement formatters, as array in bindings object
+- getValue: handle select elements (see rivets)
+- write all basic binders (see rivets)
+- special each binder! (see rivets)
+- [OK] implement read/publish kind of formatter
+- [OK] parse and implement formatters, as array in bindings object
+- [OK] keypath parser helper for rivets-like syntax (formatters)
 - [OK] 2-way binding: checking 'event' prop on binder, listen to DOM, throttle, calling 'publish'
 - [OK] parser helper should take a string or an object
 - [OK] pass values as dict-object if binder as 'values' array
-- [?] keypath parser helper for rivets-like syntax (formatters)

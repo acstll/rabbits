@@ -14,15 +14,27 @@ Rabbit.binders.color = {
   values: ['color', 'title']
 };
 
-Rabbit.binders.testing = {
-  callback: function (el, value) {
-    console.log('fuck TESTING!', value);
-  },
-  event: 'click'
+Rabbit.formatters.upcase = function upcase (value) {
+  return value.toUpperCase();
 };
 
-Rabbit.formatters.joe = function joe () {
-  console.log('HEY JOE!');
+Rabbit.formatters.add = function add (value, num) {
+  return value + num;
+};
+
+Rabbit.formatters.array = {
+  read: function (value, separator) {
+    separator = separator || ', ';
+    // console.log('array READ!', value);
+    return value.join(separator);
+  },
+  publish: function (value, separator) {
+    separator = separator || ',';
+    // console.log('array PUBLISH', value);
+    return value.split(separator).map(function (str) {
+      if (typeof str === 'string') return str.trim();
+    });
+  }
 };
 
 // create model
@@ -31,19 +43,18 @@ var model = Empty.wrap({
   age: 32,
   link: 'fourty-five',
   url: 'http://google.com',
+  tags: ['hola', 'perro', 'JO!'],
   color: 'lime'
 });
 
 var bindings = {
-  '.title text': 'title',
-  'a text': 'link',
+  '.title text': 'title | upcase',
+  'a text': {
+    keypath: 'link',
+    formatters: []
+  },
   'a href': 'url',
-  'input value': 'link',
-  '. color': {
-    keypath: 'color',
-    event: 'change:url'
-    // formatters: ['date']
-  }
+  'input value': 'tags | array'
 };
 
 // create view
@@ -51,7 +62,7 @@ var view = new Rabbit(html, model, bindings);
 
 setTimeout(function () {
   model.set({
-    title: '8302',
+    title: 'hola don pepito',
     link: '8302.net',
     url: 'http://8302.net',
     color: 'blue'
