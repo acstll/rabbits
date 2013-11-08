@@ -21,6 +21,10 @@ Rabbit.binders.testing = {
   event: 'click'
 };
 
+Rabbit.formatters.joe = function joe () {
+  console.log('HEY JOE!');
+};
+
 // create model
 var model = Empty.wrap({
   title: 'Yija',
@@ -31,10 +35,10 @@ var model = Empty.wrap({
 });
 
 var bindings = {
-  'p text': 'title',
-  'input value': 'link',
+  '.title text': 'title',
   'a text': 'link',
   'a href': 'url',
+  'input value': 'link',
   '. color': {
     keypath: 'color',
     event: 'change:url'

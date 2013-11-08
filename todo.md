@@ -1,5 +1,6 @@
 - write all basic binders except "each" (see rivets)
 - special each binder!
+- getValue: handle select elements (see rivets)
 - check rabbit.view when reading for overrides
 - parse and implement formatters, as array in bindings object
 - [OK] 2-way binding: checking 'event' prop on binder, listen to DOM, throttle, calling 'publish'
