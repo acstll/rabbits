@@ -17,6 +17,8 @@
     "through": "~2.3.4"
   },
   "dependencies": {
-    "lodash-node": "~2.2.1"
+    "lodash.debounce": "~2.2.1",
+    "lodash.merge": "~2.2.1",
+    "mout": "~0.7.1"
   }
 }

@@ -1,4 +1,5 @@
-var merge = require('lodash-node/modern/objects/merge');
+// var merge = require('lodash-node/modern/objects/merge');
+var merge = require('mout/object/merge');
 var Binding = require('./binding');
 
 var adapter = require('./adapter');
@@ -9,7 +10,7 @@ module.exports = Rabbit;
 
 Rabbit.config = {
   wait: 150,
-  preload: true,
+  render: true,
   adapter: adapter,
   binders: binders,
   formatters: formatters
@@ -32,7 +33,7 @@ function Rabbit (obj, model, map, options) {
   }
 
   this.initialize();
-  if (this.config.preload) this.render();
+  if (this.config.render) this.render();
 }
 
 Rabbit.configure = function (options) {

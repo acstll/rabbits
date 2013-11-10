@@ -1,4 +1,5 @@
-var debounce = require('lodash-node/modern/functions/debounce');
+// var debounce = require('lodash-node/modern/functions/debounce');
+var debounce = require('mout/function/debounce');
 
 
 
@@ -59,6 +60,7 @@ Binding.prototype.remove = function remove () {
  
 Binding.prototype.read = function read () {
   var model = this.rabbit.model;
+  var view = this.rabbit.view;
   var keypath = this.options.keypath;
   var get = this.adapter.get;
   var keys = this.binder.values;
@@ -69,8 +71,10 @@ Binding.prototype.read = function read () {
     keys.forEach(function (key) {
       value[key] = this.format(get(model, keypath), 'read');
     }, this);
+  } else if (typeof view[keypath] === 'function') {
+    value = view[keypath]();
   } else {
-   value = this.format(get(model, keypath), 'read');
+    value = this.format(get(model, keypath), 'read');
   }
 
   this.fn.call(this, this.el, value);

@@ -37,6 +37,18 @@ Rabbit.formatters.array = {
   }
 };
 
+// view 
+function View (el, model, bindings) {
+  this.el = el;
+  this.model = model;
+  this.rabbit = new Rabbit(this, model, bindings);
+}
+
+View.prototype.title = function () {
+  console.log('title from View# called');
+  return this.model.get('title') + ' JAJAJAJA';
+};
+
 // create model
 var model = Empty.wrap({
   title: 'Yija',
@@ -48,7 +60,7 @@ var model = Empty.wrap({
 });
 
 var bindings = {
-  '.title text': 'title | upcase',
+  '.title text': 'title',
   'a text': {
     keypath: 'link',
     formatters: []
@@ -58,7 +70,7 @@ var bindings = {
 };
 
 // create view
-var view = new Rabbit(html, model, bindings);
+var view = new View(html, model, bindings);
 
 setTimeout(function () {
   model.set({
