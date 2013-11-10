@@ -140,7 +140,25 @@ function parse (keypath) {
 }
 
 function getValue (el) {
-  return el.value
-    ? el.value
-    : el.innerText;
+  var value;
+
+  if (/input|select/i.test(el.nodeName)) {
+    if (el.type === 'checkbox') {
+      return el.checked;
+    }
+    
+    if (el.type === 'select-multiple') {
+      value = [];
+
+      for (var i = 0; i < el.options.length; i++) {
+        if (el.options[i].selected) value.push(el.options[i].value);
+      }
+
+      return value;
+    }
+    
+    return el.value;
+  }
+
+  return el.innerText;
 }
