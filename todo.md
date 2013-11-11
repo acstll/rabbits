@@ -1,5 +1,5 @@
-- special each binder! (see rivets)
 - write tests!
+- [OK] special each binder! (see rivets) VERY BASIC!
 - [OK] write all basic binders (see rivets)
 - [OK] getValue: handle select elements (see rivets)
 - [OK] check rabbit.view when reading for overrides

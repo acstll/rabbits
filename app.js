@@ -41,11 +41,26 @@ Rabbit.formatters.array = {
   }
 };
 
+var options = {
+  render: false,
+  things: ['haha', 1, 2],
+  formatters: {
+    locase: function (value) {
+      return value.toLowerCase();
+    }
+  },
+  binders: {
+    text: function (el, value) {
+      el.innerText = value + ' (OVERRIDEN!)';
+    }
+  }
+};
+
 // view 
 function View (el, model, bindings) {
   this.el = el;
   this.model = model;
-  this.rabbit = new Rabbit(this, model, bindings);
+  this.rabbit = new Rabbit(this, model, bindings, options);
 }
 
 View.prototype.title = function () {
@@ -69,11 +84,12 @@ var bindings = {
   'a color': 'color',
   'a text': {
     keypath: 'link',
-    formatters: []
+    formatters: ['locase']
   },
   'a href': 'url',
   'input value': 'tags | array',
-  'input[name="nice"] checked': 'nice'
+  'input[name="nice"] checked': 'nice',
+  'li each': 'tags'
 };
 
 // create view
@@ -86,6 +102,8 @@ setTimeout(function () {
     url: 'http://8302.net',
     color: 'blue'
   });
+
+  view.rabbit.render();
 }, 600);
 
 document.body.appendChild(view.el);

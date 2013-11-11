@@ -1,8 +1,3 @@
-// var debounce = require('lodash-node/modern/functions/debounce');
-var debounce = require('mout/function/debounce');
-
-
-
 module.exports = Binding;
 
 function Binding (rabbit, node, type, keypath) {
@@ -22,7 +17,6 @@ Binding.prototype.create = function create () {
   var subscribe = this.adapter.subscribe;
   var binder = this.binder;
   var model = this.rabbit.model;
-  var wait = this.rabbit.config.wait || 150;
 
   if (typeof binder === 'function') {
     this.fn = binder;
@@ -33,7 +27,7 @@ Binding.prototype.create = function create () {
   }
 
   if (binder.event) {
-    this.listener = debounce(this.publish.bind(this), wait);
+    this.listener = this.publish.bind(this);
     this.el.addEventListener(binder.event, this.listener, false);
   }
   

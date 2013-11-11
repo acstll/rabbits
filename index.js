@@ -1,20 +1,18 @@
-// var merge = require('lodash-node/modern/objects/merge');
-var merge = require('mout/object/merge');
+var merge = require('./options');
 var Binding = require('./binding');
 
-var adapter = require('./adapter');
+var adapter = Rabbit.adapter = require('./adapter');
 var binders = Rabbit.binders = require('./binders');
 var formatters = Rabbit.formatters = {};
 
-module.exports = Rabbit;
-
-Rabbit.config = {
-  wait: 150,
+var defaults = {
   render: true,
   adapter: adapter,
   binders: binders,
   formatters: formatters
 };
+
+module.exports = Rabbit;
 
 
 
@@ -22,7 +20,7 @@ function Rabbit (obj, model, map, options) {
   this.bindings = [];
   this.model = model || {};
   this.map = map;
-  this.config = merge(Rabbit.config, options || {});
+  this.config = merge(defaults, options || {});
   
   if (obj.nodeType > 0) {
     this.view = {};
@@ -35,10 +33,6 @@ function Rabbit (obj, model, map, options) {
   this.initialize();
   if (this.config.render) this.render();
 }
-
-Rabbit.configure = function (options) {
-  merge(Rabbit.config, options || {});
-};
 
 Rabbit.prototype.initialize = function initialize () {
   var map = this.map;

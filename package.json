@@ -16,9 +16,5 @@
     "browserify": "~2.35.1",
     "through": "~2.3.4"
   },
-  "dependencies": {
-    "lodash.debounce": "~2.2.1",
-    "lodash.merge": "~2.2.1",
-    "mout": "~0.7.1"
-  }
+  "dependencies": {}
 }
