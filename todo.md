@@ -1,7 +1,7 @@
 - special each binder! (see rivets)
-- write all basic binders (see rivets)
 - write tests!
-- [OK]getValue: handle select elements (see rivets)
+- [OK] write all basic binders (see rivets)
+- [OK] getValue: handle select elements (see rivets)
 - [OK] check rabbit.view when reading for overrides
 - [OK] implement read/publish kind of formatter
 - [OK] parse and implement formatters, as array in bindings object

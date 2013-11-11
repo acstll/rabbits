@@ -8,10 +8,14 @@ Empty.configure({ events: EventEmitter });
 // html.cloneNode(true)
 
 Rabbit.binders.color = {
+  oncreate: function (el) {
+    this.polla = '8====D';
+  },
   callback: function (el, value) {
     el.style.color = value.color;
+    console.log(this.polla, value);
   },
-  values: ['color', 'title']
+  values: ['color', 'age']
 };
 
 Rabbit.formatters.upcase = function upcase (value) {
@@ -56,17 +60,20 @@ var model = Empty.wrap({
   link: 'fourty-five',
   url: 'http://google.com',
   tags: ['hola', 'perro', 'JO!'],
-  color: 'lime'
+  color: 'lime',
+  nice: true
 });
 
 var bindings = {
   '.title text': 'title',
+  'a color': 'color',
   'a text': {
     keypath: 'link',
     formatters: []
   },
   'a href': 'url',
-  'input value': 'tags | array'
+  'input value': 'tags | array',
+  'input[name="nice"] checked': 'nice'
 };
 
 // create view

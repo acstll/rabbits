@@ -69,7 +69,7 @@ Binding.prototype.read = function read () {
   if (keys) {
     value = {};
     keys.forEach(function (key) {
-      value[key] = this.format(get(model, keypath), 'read');
+      value[key] = this.format(get(model, key), 'read');
     }, this);
   } else if (typeof view[keypath] === 'function') {
     value = view[keypath]();

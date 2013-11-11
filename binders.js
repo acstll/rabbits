@@ -27,10 +27,78 @@ exports.href = function (el, value) {
 exports.value = {
   event: 'change',
   callback: function (el, value) {
-    // TODO: select
+    if (el.type === 'select-multiple') {
+      for (var i = 0; i < el.options.length; i++) {
+        if (value.indexOf(el.options[i].value) > -1)
+          el.options[i].selected = 'selected';
+      }
+      return;
+    }
+
     el.value = value;
   }
 };
 
-// show, hide, enabled, disabled
-// checked, unchecked
+exports.show = {
+  oncreate: function (el) {
+    this.initialValue = el.style.display;
+  },
+  callback: function (el, value) {
+    if (value) {
+      el.style.display = this.initialValue;
+    } else {
+      el.style.display = 'none';
+    }
+  }
+};
+
+exports.hide = {
+  oncreate: function (el) {
+    this.initialValue = el.style.display;
+  },
+  callback: function (el, value) {
+    if (value) {
+      el.style.display = 'none';
+    } else {
+      el.style.display = this.initialValue;
+    }
+  }
+};
+
+exports.enabled = function (el, value) {
+  if (value) {
+    el.disabled = false;
+  } else {
+    el.disabled = 'disabled';
+  }
+};
+
+exports.disabled = function (el, value) {
+  if (value) {
+    el.disabled = 'disabled';
+  } else {
+    el.disabled = false;
+  }
+};
+
+exports.checked = {
+  event: 'change',
+  callback: function (el, value) {
+    if (value) {
+      el.checked = 'checked';
+    } else {
+      el.checked = false;
+    }
+  }
+};
+
+exports.unchecked = {
+  event: 'change',
+  callback: function (el, value) {
+    if (value) {
+      el.checked = false;
+    } else {
+      el.checked = 'checked';
+    }
+  }
+};
