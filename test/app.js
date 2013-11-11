@@ -1,6 +1,6 @@
 var EventEmitter = require('eventemitter3');
 var Empty = require('empty');
-var Rabbit = require('./index');
+var Rabbit = require('../index');
 var html = require('./template.html');
 
 Empty.configure({ events: EventEmitter });
