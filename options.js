@@ -5,7 +5,9 @@ function options (target, source) {
   source = source || {};
   var keys = Object.keys(source) || [];
 
-  if (Array.isArray(source) || keys.length === 0) {
+  if (!keys.length) return target;
+
+  if (Array.isArray(source)) {
     target = source;
     return target;
   }

@@ -38,6 +38,7 @@ Binding.prototype.create = function create () {
   subscribe(model, this.options, this.callback);
 };
 
+Binding.prototype.unbind =
 Binding.prototype.remove = function remove () {
   var binder = this.binder;
   var unsubscribe = this.adapter.unsubscribe;
@@ -87,6 +88,7 @@ Binding.prototype.format = function format (value, action) {
   var formatters = this.options.formatters || [];
   var length = formatters.length;
   var args, name, fn;
+  action = action || 'read';
 
   if (!length) return value;
 

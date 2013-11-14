@@ -18,6 +18,35 @@ Rabbit.binders.color = {
   values: ['color', 'age']
 };
 
+Rabbit.binders.each = {
+  oncreate: function (el) {
+    var template = el.cloneNode(true);
+    this.children = [];
+
+    this.template = function () {
+      return template.cloneNode(true);
+    };
+    this.container = el.parentNode;
+    el.parentNode.removeChild(el);
+  },
+  callback: function (el, values) {
+    var bindings = this.rabbit.config.bindings;
+    this.container.innerHTML = '';
+
+    values.origin.forEach(function (value) {
+      var item = this.template();
+      var rabbit = new Rabbit(item, value, bindings);
+      this.container.appendChild(rabbit.el);
+      this.children.push(rabbit);
+    }, this);
+  },
+  onremove: function (el) {
+    this.children.forEach(function (rabbit) {
+      rabbit.remove();
+    });
+  }
+};
+
 Rabbit.formatters.upcase = function upcase (value) {
   return value.toUpperCase();
 };
@@ -42,19 +71,41 @@ Rabbit.formatters.array = {
 };
 
 var options = {
-  render: false,
   things: ['haha', 1, 2],
   formatters: {
     locase: function (value) {
       return value.toLowerCase();
     }
   },
-  binders: {
-    text: function (el, value) {
-      el.innerText = value + ' (OVERRIDEN!)';
-    }
+  // for eech
+  bindings: {
+    'span': 'title',
+    'a': 'link',
+    'a href': 'href',
   }
 };
+
+var links = Empty.wrap([]);
+
+links.push(Empty.wrap({
+  title: 'JAJAJA',
+  link: 'jajaja.net',
+  href: 'http://jajaja.net'
+}));
+
+links.push(Empty.wrap({
+  title: 'HIHIHI',
+  link: 'hihihi.net',
+  href: 'http://hihihi.net'
+}));
+
+links.push(Empty.wrap({
+  title: 'YAY',
+  link: 'yay.net',
+  href: 'http://yay.net'
+}));
+
+window.links = links;
 
 // view 
 function View (el, model, bindings) {
@@ -76,7 +127,8 @@ var model = Empty.wrap({
   url: 'http://google.com',
   tags: ['hola', 'perro', 'JO!'],
   color: 'lime',
-  nice: true
+  nice: true,
+  links: links
 });
 
 var bindings = {
@@ -89,24 +141,28 @@ var bindings = {
   'a href': 'url',
   'input value': 'tags | array',
   'input[name="nice"] checked': 'nice',
-  'li each': 'tags'
+  'li each': {
+    keypath: 'links'
+  }
 };
 
 // create view
 var view = new View(html, model, bindings);
 
-setTimeout(function () {
-  model.set({
-    title: 'hola don pepito',
-    link: '8302.net',
-    url: 'http://8302.net',
-    color: 'blue'
-  });
+// setTimeout(function () {
+//   model.set({
+//     title: 'hola don pepito',
+//     link: '8302.net',
+//     url: 'http://8302.net',
+//     color: 'blue'
+//   });
 
-  view.rabbit.render();
-}, 600);
+//   view.rabbit.render();
+// }, 600);
 
 document.body.appendChild(view.el);
 
 window.model = model;
 window.view = view;
+window.Rabbit = Rabbit;
+window.Empty = Empty;

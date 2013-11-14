@@ -8,7 +8,7 @@ var app = express();
 app.get('/js/app.js', function (req, res) {
   var b = browserify({ detectGlobals: false });
   b.transform(trdomify);
-  b.add('./app.js');
+  b.add('./test/app.js');
   b.bundle(function (err, bundle) {
     if (err) return res.send(400, err.message);
     res.charset = 'utf-8';

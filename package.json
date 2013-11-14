@@ -1,10 +1,10 @@
 {
-  "name": "rabbit",
+  "name": "rabbits",
   "version": "0.0.0",
-  "description": "",
+  "description": "Syntax-free 2-way bindings.",
   "main": "index.js",
   "scripts": {
-    "test": "node server.js"
+    "test": "node test/server.js"
   },
   "author": "Arturo Castillo Delgado",
   "license": "MIT",
