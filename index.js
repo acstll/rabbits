@@ -1,4 +1,5 @@
-var merge = require('./options');
+var merge = require('deepmerge');
+
 var Binding = require('./binding');
 
 var adapter = Rabbit.adapter = require('./adapter');

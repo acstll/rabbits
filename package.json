@@ -1,6 +1,6 @@
 {
   "name": "rabbits",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Syntax-free 2-way bindings.",
   "main": "index.js",
   "scripts": {
@@ -8,6 +8,9 @@
   },
   "author": "Arturo Castillo Delgado",
   "license": "MIT",
+  "dependencies": {
+    "deepmerge": "~0.2.7"
+  },
   "devDependencies": {
     "domify": "~1.0.0",
     "empty": "~0.2.0",
@@ -15,6 +18,5 @@
     "express": "~3.4.4",
     "browserify": "~2.35.1",
     "through": "~2.3.4"
-  },
-  "dependencies": {}
+  }
 }
