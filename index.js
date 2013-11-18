@@ -46,7 +46,9 @@ Rabbit.prototype.initialize = function initialize () {
     node = query(this.el, selector);
     type = segments[1] || 'text';
 
-    if (!node) throw new Error('No element found using the provided selector');
+    if (!node) {
+      throw new Error('No element found using the provided selector: ' + selector);
+    }
 
     this.bindings.push(new Binding(this, node, type, keypath));
   }

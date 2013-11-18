@@ -138,23 +138,19 @@ function parse (keypath) {
 function getValue (el) {
   var value;
 
-  if (/input|select/i.test(el.nodeName)) {
-    if (el.type === 'checkbox') {
-      return el.checked;
-    }
-    
-    if (el.type === 'select-multiple') {
-      value = [];
+  if (el.type === 'checkbox') return el.checked;
 
-      for (var i = 0; i < el.options.length; i++) {
-        if (el.options[i].selected) value.push(el.options[i].value);
-      }
+  if (el.type === 'select-multiple') {    
+    value = [];
 
-      return value;
+    for (var i = 0; i < el.options.length; i++) {
+      if (el.options[i].selected) value.push(el.options[i].value);
     }
-    
-    return el.value;
+
+    return value;
   }
+
+  if (el.value) return el.value;
 
   return el.innerText;
 }
