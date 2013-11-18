@@ -13,15 +13,19 @@
 
 
 exports.text = function (el, value) {
-  el.innerText = value;
+  el.innerText = value || '';
 };
 
 exports.html = function (el, value) {
-  el.innerHTML = value;
+  el.innerHTML = value || '';
 };
 
 exports.href = function (el, value) {
-  el.href = value;
+  el.href = value || '';
+};
+
+exports.src = function (el, value) {
+  el.src = value || '';
 };
 
 exports.value = {
@@ -35,7 +39,7 @@ exports.value = {
       return;
     }
 
-    el.value = value;
+    el.value = value || '';
   }
 };
 
