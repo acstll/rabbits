@@ -70,39 +70,33 @@ exports.hide = {
 };
 
 exports.enabled = function (el, value) {
-  if (value) {
-    el.disabled = false;
-  } else {
-    el.disabled = 'disabled';
-  }
+  el.disabled = !!value;
 };
 
 exports.disabled = function (el, value) {
-  if (value) {
-    el.disabled = 'disabled';
-  } else {
-    el.disabled = false;
-  }
+  el.disabled = !value;
 };
 
 exports.checked = {
   event: 'change',
   callback: function (el, value) {
-    if (value) {
-      el.checked = 'checked';
-    } else {
-      el.checked = false;
+    if (el.type === 'radio') {
+      el.checked = (el.value == value);
+      return;
     }
+
+    el.checked = !!value;
   }
 };
 
 exports.unchecked = {
   event: 'change',
   callback: function (el, value) {
-    if (value) {
-      el.checked = false;
-    } else {
-      el.checked = 'checked';
+    if (el.type === 'radio') {
+      el.checked = !(el.value == value);
+      return;
     }
+
+    el.checked = !value;
   }
 };
