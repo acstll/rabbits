@@ -1,6 +1,6 @@
 {
   "name": "rabbits",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Syntax-free 2-way bindings.",
   "main": "index.js",
   "scripts": {
