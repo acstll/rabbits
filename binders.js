@@ -13,7 +13,7 @@
 
 
 exports.text = function (el, value) {
-  el.innerText = value || '';
+  el.textContent = value || '';
 };
 
 exports.html = function (el, value) {

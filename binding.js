@@ -73,6 +73,7 @@ Binding.prototype.read = function read () {
   }
 
   this.fn.call(this, this.el, value);
+  // TODO?: implement nextTick, test perf
 };
 
 Binding.prototype.publish = function publish () {
@@ -152,5 +153,5 @@ function getValue (el) {
 
   if (el.value) return el.value;
 
-  return el.innerText;
+  return el.textContent;
 }
